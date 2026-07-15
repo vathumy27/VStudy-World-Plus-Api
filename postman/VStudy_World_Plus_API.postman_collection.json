@@ -1,0 +1,338 @@
+{
+  "info": {
+    "name": "VStudy World Plus API",
+    "description": "Postman collection for VStudy World Plus — AI-powered personalized learning platform API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000"
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": "{{base_url}}/api/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Kamal Perera\",\n  \"email\": \"kamal@school.lk\",\n  \"password\": \"secure123\",\n  \"school\": \"Colombo Central College\",\n  \"grade\": \"11\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.data && json.data.access_token) {",
+                  "    pm.collectionVariables.set('access_token', json.data.access_token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": "{{base_url}}/api/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"kamal@school.lk\",\n  \"password\": \"secure123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Me",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/auth/me"
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": "{{base_url}}/api/auth/profile",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Kamal Perera\",\n  \"grade\": \"12\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/auth/logout"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Subjects",
+      "item": [
+        {
+          "name": "Get All Subjects",
+          "request": {"method": "GET", "url": "{{base_url}}/api/subjects"}
+        },
+        {
+          "name": "Create Subject",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": "{{base_url}}/api/subjects",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Mathematics\",\n  \"description\": \"Algebra, Geometry and more\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Lessons",
+      "item": [
+        {
+          "name": "Get All Lessons",
+          "request": {"method": "GET", "url": "{{base_url}}/api/lessons"}
+        },
+        {
+          "name": "Get Lesson by ID",
+          "request": {"method": "GET", "url": "{{base_url}}/api/lessons/1"}
+        },
+        {
+          "name": "Create Lesson",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": "{{base_url}}/api/lessons",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subject_id\": 1,\n  \"title\": \"Introduction to Algebra\",\n  \"content\": \"Algebra is the branch of mathematics...\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "AI",
+      "item": [
+        {
+          "name": "Summarize Lesson",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": "{{base_url}}/api/ai/summarize",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lesson_content\": \"The water cycle is the continuous movement of water on Earth.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Explain Topic",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": "{{base_url}}/api/ai/explain",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"topic\": \"Photosynthesis\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Generate History Video",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": "{{base_url}}/api/ai/generate-video",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"history_lesson\": \"The Kandyan Kingdom and its resistance to colonial rule\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Quiz",
+      "item": [
+        {
+          "name": "Generate Quiz",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": "{{base_url}}/api/quiz/generate",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"topic\": \"Water Cycle\",\n  \"num_questions\": 5\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Quiz",
+          "request": {"method": "GET", "url": "{{base_url}}/api/quiz/1"}
+        },
+        {
+          "name": "Submit Quiz",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": "{{base_url}}/api/quiz/submit",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quiz_id\": 1,\n  \"answers\": {\n    \"1\": \"A\",\n    \"2\": \"B\"\n  }\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Progress",
+      "item": [
+        {
+          "name": "Get Progress",
+          "request": {"method": "GET", "url": "{{base_url}}/api/progress/1"}
+        },
+        {
+          "name": "Update Progress",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": "{{base_url}}/api/progress/update",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lesson_id\": 1,\n  \"status\": \"in_progress\",\n  \"completion_percentage\": 50,\n  \"time_spent_minutes\": 30\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Geography",
+      "item": [
+        {
+          "name": "Get Maps",
+          "request": {"method": "GET", "url": "{{base_url}}/api/geo/maps"}
+        },
+        {
+          "name": "Get Activities",
+          "request": {"method": "GET", "url": "{{base_url}}/api/geo/activities"}
+        },
+        {
+          "name": "Submit Marking",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": "{{base_url}}/api/geo/marking",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activity_id\": 1,\n  \"markings\": [\n    {\"label\": \"Sri Lanka\", \"x\": 120, \"y\": 80},\n    {\"label\": \"India\", \"x\": 150, \"y\": 60}\n  ]\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mathematics",
+      "item": [
+        {
+          "name": "Solve Problem",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": "{{base_url}}/api/math/solve",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"problem_text\": \"Solve for x: 2x + 5 = 15\",\n  \"show_steps\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Practice",
+          "request": {"method": "GET", "url": "{{base_url}}/api/math/practice"}
+        },
+        {
+          "name": "Check Answer",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": "{{base_url}}/api/math/check",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"practice_id\": 1,\n  \"problem_text\": \"Solve for x: 2x + 5 = 15\",\n  \"user_answer\": \"x = 5\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Study Plan",
+      "item": [
+        {
+          "name": "Generate Study Plan",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": "{{base_url}}/api/study-plan/generate",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"O/L Science Exam Plan\",\n  \"exam_date\": \"2026-08-15\",\n  \"subjects\": [\"Science\", \"Mathematics\"],\n  \"hours_per_day\": 3,\n  \"focus_areas\": [\"Physics\", \"Chemistry\"]\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Study Plans",
+          "request": {"method": "GET", "url": "{{base_url}}/api/study-plan/1"}
+        }
+      ]
+    },
+    {
+      "name": "Chat",
+      "item": [
+        {
+          "name": "Ask Question",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": "{{base_url}}/api/chat/ask",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"What is photosynthesis in simple words?\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Chat History",
+          "request": {"method": "GET", "url": "{{base_url}}/api/chat/history"}
+        }
+      ]
+    }
+  ]
+}
