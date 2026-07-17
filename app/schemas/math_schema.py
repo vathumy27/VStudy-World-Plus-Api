@@ -8,7 +8,7 @@ class MathSolveSchema(Schema):
     show_steps = fields.Bool(load_default=True)
 
     @validates("problem_text")
-    def validate_problem(self, value):
+    def validate_problem(self, value, **kwargs):
         if not value or not value.strip():
             raise ValidationError("Problem text is required.")
 
