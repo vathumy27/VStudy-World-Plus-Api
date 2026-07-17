@@ -422,7 +422,7 @@ Headers:
 Content-Type: application/json
 
 {
-  "name": "Vathumy",
+  "full_name": "Vathumy",
   "email": "vathumy@gmail.com",
   "password": "123456"
 } -->
