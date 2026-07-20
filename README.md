@@ -119,11 +119,17 @@ mysql -u root -p -e "CREATE DATABASE vstudy_world_plus;"
 export FLASK_APP=run.py
 flask db upgrade
 
-# 6. Start the server
+# 6. Seed default admin (admin@gmail.com / admin123)
+python seed.py
+
+# 7. Start the server
 python run.py
 ```
 
-Base URL: `http://localhost:5000`
+Base URL: `http://localhost:5001`
+
+Default admin: `admin@gmail.com` / `admin123`  
+MySQL database: `vstudy_world_plus`
 
 ---
 
@@ -179,6 +185,8 @@ Error responses:
 | POST | `/api/auth/login` | Public |
 | GET | `/api/auth/me` | JWT required |
 | PUT | `/api/auth/profile` | JWT required |
+| PUT | `/api/auth/email` | JWT required (needs current password) |
+| PUT | `/api/auth/password` | JWT required (needs current password) |
 | POST | `/api/auth/logout` | JWT required |
 
 ### POST `/api/auth/register`

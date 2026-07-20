@@ -98,6 +98,8 @@ def create_app():
                             "login": "POST /api/auth/login",
                             "me": "GET /api/auth/me",
                             "profile": "PUT /api/auth/profile",
+                            "email": "PUT /api/auth/email",
+                            "password": "PUT /api/auth/password",
                             "logout": "POST /api/auth/logout",
                         },
                         "subjects": "/api/subjects",

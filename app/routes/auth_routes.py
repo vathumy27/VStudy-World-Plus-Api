@@ -34,6 +34,22 @@ def update_profile():
     return AuthService.update_profile(user_id, request.get_json(silent=True))
 
 
+@auth_bp.route("/email", methods=["PUT"])
+@jwt_required()
+def update_email():
+    """Update the authenticated user's email (requires current password)."""
+    user_id = get_jwt_identity()
+    return AuthService.update_email(user_id, request.get_json(silent=True))
+
+
+@auth_bp.route("/password", methods=["PUT"])
+@jwt_required()
+def update_password():
+    """Update the authenticated user's password (requires current password)."""
+    user_id = get_jwt_identity()
+    return AuthService.update_password(user_id, request.get_json(silent=True))
+
+
 @auth_bp.route("/logout", methods=["POST"])
 @jwt_required()
 def logout():
