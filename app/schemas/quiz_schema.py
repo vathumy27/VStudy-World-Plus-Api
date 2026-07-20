@@ -9,7 +9,7 @@ class QuizGenerateSchema(Schema):
     num_questions = fields.Int(load_default=5)
 
     @validates_schema
-    def validate_lesson_or_topic(self, data, **_kwargs):
+    def validate_lesson_or_topic(self, data, **kwargs):
         if not data.get("lesson_id") and not data.get("topic"):
             raise ValidationError(
                 "Either lesson_id or topic is required.",
@@ -17,12 +17,12 @@ class QuizGenerateSchema(Schema):
             )
 
     @validates("num_questions")
-    def validate_num_questions(self, value):
+    def validate_num_questions(self, value, **kwargs):
         if value < 1 or value > 20:
             raise ValidationError("Number of questions must be between 1 and 20.")
 
     @validates("topic")
-    def validate_topic(self, value):
+    def validate_topic(self, value, **kwargs):
         if value is not None and not value.strip():
             raise ValidationError("Topic cannot be empty.")
 
@@ -34,6 +34,6 @@ class QuizSubmitSchema(Schema):
     answers = fields.Dict(keys=fields.Str(), values=fields.Str(), required=True)
 
     @validates("answers")
-    def validate_answers(self, value):
+    def validate_answers(self, value, **kwargs):
         if not value:
             raise ValidationError("At least one answer is required.")

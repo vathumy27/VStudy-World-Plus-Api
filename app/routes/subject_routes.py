@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from flask_jwt_extended import jwt_required
 
 from app.services.subject_service import SubjectService
+from app.services.lesson_service import LessonService
 from app.utils.decorators import role_required
 
 subject_bp = Blueprint("subjects", __name__, url_prefix="/api/subjects")
@@ -43,3 +44,18 @@ def update_subject(subject_id):
 def delete_subject(subject_id):
     """Delete a subject (Teacher/Admin only)."""
     return SubjectService.delete(subject_id)
+
+
+@subject_bp.route("/<int:subject_id>/lessons", methods=["GET"])
+@jwt_required()
+def get_subject_lessons(subject_id):
+    """Return lessons for a specific subject with optional filters."""
+    return LessonService.get_all(
+        subject_id=subject_id,
+        grade=request.args.get("grade", type=int),
+        unit=request.args.get("unit"),
+        language=request.args.get("language"),
+        search=request.args.get("search"),
+        page=request.args.get("page", default=1, type=int),
+        per_page=request.args.get("per_page", default=20, type=int),
+    )

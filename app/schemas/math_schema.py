@@ -21,11 +21,11 @@ class MathCheckSchema(Schema):
     user_answer = fields.Str(required=True)
 
     @validates("problem_text")
-    def validate_problem(self, value):
+    def validate_problem(self, value, **kwargs):
         if not value or not value.strip():
             raise ValidationError("Problem text is required.")
 
     @validates("user_answer")
-    def validate_answer(self, value):
+    def validate_answer(self, value, **kwargs):
         if not value or not value.strip():
             raise ValidationError("User answer is required.")

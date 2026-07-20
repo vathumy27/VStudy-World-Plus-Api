@@ -8,6 +8,6 @@ class MapMarkingSchema(Schema):
     markings = fields.List(fields.Dict(), required=True)
 
     @validates("markings")
-    def validate_markings(self, value):
+    def validate_markings(self, value, **kwargs):
         if not value:
             raise ValidationError("At least one marking is required.")

@@ -8,8 +8,12 @@ class OpenAIClient:
 
     @staticmethod
     def is_configured():
-        """Return True if OpenAI API key is configured."""
-        return bool(os.getenv("OPENAI_API_KEY", "").strip())
+        """Return True if a real OpenAI API key is configured."""
+        api_key = os.getenv("OPENAI_API_KEY", "").strip()
+        if not api_key:
+            return False
+        placeholders = {"your-openai-api-key", "changeme", "none", "null"}
+        return api_key.lower() not in placeholders
 
     @staticmethod
     def generate_text(prompt, system_message=None, max_tokens=500):
@@ -17,14 +21,15 @@ class OpenAIClient:
         Generate text using OpenAI API when configured,
         otherwise return None to trigger mock fallback.
         """
-        api_key = os.getenv("OPENAI_API_KEY", "").strip()
-        if not api_key:
+        if not OpenAIClient.is_configured():
             return None
+
+        api_key = os.getenv("OPENAI_API_KEY", "").strip()
 
         try:
             from openai import OpenAI
 
-            client = OpenAI(api_key=api_key)
+            client = OpenAI(api_key=api_key, timeout=25.0)
             model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
             messages = []
             if system_message:
@@ -35,8 +40,13 @@ class OpenAIClient:
                 model=model,
                 messages=messages,
                 max_tokens=max_tokens,
+                temperature=0.4,
             )
-            return response.choices[0].message.content.strip()
+            content = response.choices[0].message.content
+            return content.strip() if content else None
         except Exception as exc:
-            current_app.logger.error("OpenAI API error: %s", str(exc))
+            try:
+                current_app.logger.error("OpenAI API error: %s", str(exc))
+            except Exception:
+                pass
             return None

@@ -7,12 +7,39 @@ from app.utils.decorators import role_required
 lesson_bp = Blueprint("lessons", __name__, url_prefix="/api/lessons")
 
 
+def _filters_from_request():
+    return {
+        "subject_id": request.args.get("subject_id", type=int),
+        "grade": request.args.get("grade", type=int),
+        "unit": request.args.get("unit"),
+        "language": request.args.get("language"),
+        "search": request.args.get("search"),
+        "page": request.args.get("page", default=1, type=int),
+        "per_page": request.args.get("per_page", default=20, type=int),
+    }
+
+
 @lesson_bp.route("", methods=["GET"])
 @jwt_required()
 def get_lessons():
-    """Return all lessons, optionally filtered by subject_id query param."""
-    subject_id = request.args.get("subject_id", type=int)
-    return LessonService.get_all(subject_id=subject_id)
+    """Return lessons with optional filters and pagination."""
+    return LessonService.get_all(**_filters_from_request())
+
+
+@lesson_bp.route("/grade/<int:grade>", methods=["GET"])
+@jwt_required()
+def get_lessons_by_grade(grade):
+    filters = _filters_from_request()
+    filters["grade"] = grade
+    return LessonService.get_all(**filters)
+
+
+@lesson_bp.route("/subject/<string:subject_name>", methods=["GET"])
+@jwt_required()
+def get_lessons_by_subject_name(subject_name):
+    filters = _filters_from_request()
+    filters["subject_name"] = subject_name
+    return LessonService.get_all(**filters)
 
 
 @lesson_bp.route("/<int:lesson_id>", methods=["GET"])

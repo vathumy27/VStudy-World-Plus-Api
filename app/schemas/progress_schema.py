@@ -11,12 +11,12 @@ class ProgressUpdateSchema(Schema):
     time_spent_minutes = fields.Int(load_default=None)
 
     @validates_schema
-    def validate_at_least_one_field(self, data, **_kwargs):
+    def validate_at_least_one_field(self, data, **kwargs):
         if not data:
             raise ValidationError("At least one field is required to update.")
 
     @validates("status")
-    def validate_status(self, value):
+    def validate_status(self, value, **kwargs):
         if value is not None:
             allowed = ("not_started", "in_progress", "completed")
             if value not in allowed:
@@ -25,7 +25,7 @@ class ProgressUpdateSchema(Schema):
                 )
 
     @validates("completion_percentage")
-    def validate_completion(self, value):
+    def validate_completion(self, value, **kwargs):
         if value is not None and (value < 0 or value > 100):
             raise ValidationError(
                 "Completion percentage must be between 0 and 100."

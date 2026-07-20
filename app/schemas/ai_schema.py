@@ -7,7 +7,7 @@ class SummarizeSchema(Schema):
     lesson_content = fields.Str(required=True)
 
     @validates("lesson_content")
-    def validate_content(self, value):
+    def validate_content(self, value, **kwargs):
         if not value or not value.strip():
             raise ValidationError("Lesson content is required.")
 
@@ -18,7 +18,7 @@ class ExplainSchema(Schema):
     topic = fields.Str(required=True)
 
     @validates("topic")
-    def validate_topic(self, value):
+    def validate_topic(self, value, **kwargs):
         if not value or not value.strip():
             raise ValidationError("Topic is required.")
 
@@ -29,6 +29,6 @@ class GenerateVideoSchema(Schema):
     history_lesson = fields.Str(required=True)
 
     @validates("history_lesson")
-    def validate_history_lesson(self, value):
+    def validate_history_lesson(self, value, **kwargs):
         if not value or not value.strip():
             raise ValidationError("History lesson content is required.")

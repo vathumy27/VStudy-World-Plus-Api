@@ -18,7 +18,7 @@ class SubjectCreateSchema(Schema):
     image = fields.Str(load_default=None)
 
     @validates("name")
-    def validate_name(self, value):
+    def validate_name(self, value, **kwargs):
         if not value or not value.strip():
             raise ValidationError("Subject name is required.")
 
@@ -31,6 +31,6 @@ class SubjectUpdateSchema(Schema):
     image = fields.Str(allow_none=True)
 
     @validates("name")
-    def validate_name(self, value):
+    def validate_name(self, value, **kwargs):
         if value is not None and not value.strip():
             raise ValidationError("Subject name cannot be empty.")

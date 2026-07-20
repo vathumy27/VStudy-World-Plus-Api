@@ -7,6 +7,7 @@ from app.models.math import MathPractice, MathSolution
 from app.models.progress import Progress
 from app.models.quiz import Quiz, QuizQuestion, QuizResult
 from app.models.study_plan import StudyPlan
+from app.models.study_resource import StudyResource
 from app.models.subject import Subject
 from app.models.user import User
 
@@ -21,6 +22,7 @@ __all__ = [
     "QuizResult",
     "Progress",
     "StudyPlan",
+    "StudyResource",
     "ChatHistory",
     "GeographyActivity",
     "MapSubmission",

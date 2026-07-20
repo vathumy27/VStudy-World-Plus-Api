@@ -7,7 +7,7 @@ class ChatAskSchema(Schema):
     question = fields.Str(required=True)
 
     @validates("question")
-    def validate_question(self, value):
+    def validate_question(self, value, **kwargs):
         if not value or not value.strip():
             raise ValidationError("Question is required.")
         if len(value) > 2000:

@@ -16,6 +16,19 @@ class Lesson(db.Model):
     content = db.Column(db.Text, nullable=True)
     summary = db.Column(db.Text, nullable=True)
     video_url = db.Column(db.String(500), nullable=True)
+
+    # e-Thaksalawa metadata fields
+    grade = db.Column(db.Integer, nullable=True, index=True)
+    unit_number = db.Column(db.String(50), nullable=True, index=True)
+    language = db.Column(db.String(20), nullable=True, index=True)
+    pdf_url = db.Column(db.String(500), nullable=True)
+    image_url = db.Column(db.String(500), nullable=True)
+    resource_url = db.Column(db.String(500), nullable=True)
+    download_url = db.Column(db.String(500), nullable=True)
+    source_url = db.Column(db.String(500), nullable=True)
+    source_provider = db.Column(db.String(120), nullable=True)
+    resource_links = db.Column(db.JSON, nullable=True)
+
     created_at = db.Column(db.DateTime, default=utc_now, nullable=False)
     updated_at = db.Column(
         db.DateTime, default=utc_now, onupdate=utc_now, nullable=False
@@ -45,6 +58,16 @@ class Lesson(db.Model):
             "content": self.content,
             "summary": self.summary,
             "video_url": self.video_url,
+            "grade": self.grade,
+            "unit_number": self.unit_number,
+            "language": self.language,
+            "pdf_url": self.pdf_url,
+            "image_url": self.image_url,
+            "resource_url": self.resource_url,
+            "download_url": self.download_url,
+            "source_url": self.source_url,
+            "source_provider": self.source_provider,
+            "resource_links": self.resource_links or [],
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,
         }

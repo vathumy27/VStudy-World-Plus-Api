@@ -12,10 +12,14 @@ class AIService:
     @staticmethod
     def _format_validation_errors(err):
         messages = []
-        for field, field_errors in err.messages.items():
-            for message in field_errors:
-                messages.append(f"{field}: {message}")
-        return "; ".join(messages)
+        raw = getattr(err, "messages", None)
+        if isinstance(raw, dict):
+            for field, field_errors in raw.items():
+                errors = field_errors if isinstance(field_errors, (list, tuple)) else [field_errors]
+                for message in errors:
+                    messages.append(f"{field}: {message}")
+            return "; ".join(messages)
+        return str(err)
 
     @staticmethod
     def summarize(data, user_id=None):
